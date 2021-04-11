@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { Route } from "react-router-dom";
+import NavBar from "./components/NavBar";
+import Home from "./components/Home";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
+import Logout from "./components/Logout";
+import Profile from "./components/Profile";
+import auth from "./services/authService";
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class APP extends Component {
+  state = {};
+  componentDidMount() {
+    const user = auth.getUser();
+    this.setState({ user });
+  }
+  render() {
+    return (
+      <div className="App">
+        <NavBar user={this.state.user} />
+        <div className="container">
+          <Route path="/" exact component={Home} />
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
+          <Route path="/logout" exact component={Logout} />
+          <Route path="/profile" component={Profile} />
+        </div>
+      </div>
+    );
+  }
 }
 
-export default App;
+export default APP;
