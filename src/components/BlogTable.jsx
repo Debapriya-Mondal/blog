@@ -31,7 +31,7 @@ class BlogTable extends Component {
           {this.state.data.map((blog) => (
             <tr key={blog._id}>
               <td>{blog.title}</td>
-              <td>{blog.date}</td>
+              <td>{new Date(blog.date).toLocaleDateString("en-US")}</td>
               <td>
                 {
                   <button

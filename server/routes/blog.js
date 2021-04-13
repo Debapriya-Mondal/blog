@@ -12,9 +12,8 @@ router.post("/", auth, async (req, res) => {
   // if (error) return res.status(400).send(error);
   let blog = new Blog({
     title: req.body.title,
-    category: req.body.category,
     body: req.body.body,
-    authorId: req.body.authorId,
+    author: req.body.author,
   });
   blog = await blog.save();
   res.send(blog);
@@ -28,6 +27,23 @@ router.put("/:id", auth, async (req, res) => {
   if (!blog) return res.status(404).send("Blog with the id not found");
   return res.send(blog);
 });
+router.put("/like/:blogId", async (req, res) => {
+  const blog = await Blog.find({ _id: req.params.blogId });
+  if (!blog) {
+    return res.status(404).send("Blog with the id not found");
+  } else {
+    if (blog[0].like.indexOf(req.body.authorId) == -1) {
+      blog[0].like.push(req.body.authorId);
+    } else {
+      blog[0].like.pull(req.body.authorId);
+    }
+  }
+  await Blog.updateOne(
+    { _id: req.params.blogId },
+    { $set: { like: blog[0].like } }
+  );
+});
+
 router.delete("/:id", auth, async (req, res) => {
   const blog = await Blog.findOneAndRemove(req.params.id);
   if (!blog) return res.status(404).send("Blog not found");
@@ -40,7 +56,7 @@ router.get("/:blogid", async (req, res) => {
 });
 
 router.get("/blog/:userid", auth, async (req, res) => {
-  const blog = await Blog.find({ authorId: req.params.userid });
+  const blog = await Blog.find({ "author.id": req.params.userid });
   if (!blog)
     return res.status(404).send("Blog with the given user id not found");
   res.send(blog);

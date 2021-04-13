@@ -7,7 +7,7 @@ class NewPost extends Form {
   state = {
     data: {
       title: "",
-      authorId: "",
+      author: { name: "", id: "" },
       body: "",
     },
     errors: "",
@@ -21,15 +21,15 @@ class NewPost extends Form {
       data: {
         title: blog.title,
         body: blog.body,
-        authorName: blog.authorName,
-        authorId: blog.authorId,
+        author: { name: blog.author.name, id: blog.author._id },
       },
     });
   }
   doSubmit = async () => {
     const user = getUser();
     const data = { ...this.state.data };
-    data["authorId"] = user._id;
+    data.author["id"] = user._id;
+    data.author["name"] = user.name;
     const blogId = this.props.match.params.id;
     try {
       if (blogId === "new") {
@@ -41,10 +41,9 @@ class NewPost extends Form {
       }
 
       this.props.history.push("/profile/blog-table");
-      console.log(this.props);
     } catch (error) {
       if (error.response && error.response.status === 400)
-        alert(error.response.data);
+        alert(error.response);
     }
   };
   render() {

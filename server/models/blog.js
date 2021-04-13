@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
-const Joi = require("joi");
-const { userSchema } = require("./user");
 
+const Joi = require("joi");
 const Blog = mongoose.model(
   "Blog",
   new mongoose.Schema({
@@ -17,14 +16,11 @@ const Blog = mongoose.model(
       type: String,
       require: true,
     },
-    authorId: {
-      type: String,
-      require: true,
+    author: {
+      name: { type: String },
+      id: { type: String },
     },
-    like: {
-      type: Number,
-      default: 0,
-    },
+    like: [{ type: String }],
     date: {
       type: Date,
       default: Date.now(),
@@ -32,13 +28,11 @@ const Blog = mongoose.model(
   })
 );
 function validateBlog(blog) {
-  const schema = {
+  const schema = Joi.object({
     title: Joi.string().required(),
-    category: Joi.string().required(),
-    author: Joi.string().required(),
     body: Joi.string().required(),
-  };
-  return Joi.validate(blog, schema);
+  });
+  return schema.validate(blog);
 }
 
 exports.Blog = Blog;

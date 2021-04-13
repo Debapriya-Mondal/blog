@@ -48,7 +48,7 @@ const NavBar = ({ user }) => {
             {user && (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/Profile">
+                  <Link className="nav-link" to="/profile/my-profile">
                     {user.name}
                   </Link>
                 </li>

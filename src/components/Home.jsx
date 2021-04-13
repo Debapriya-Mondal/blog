@@ -17,8 +17,12 @@ class Home extends Component {
             return (
               <Card
                 key={blog._id}
+                id={blog._id}
+                author={blog.author.name}
                 title={blog.title}
                 body={blog.body.slice(0, 100)}
+                date={blog.date}
+                like={blog.like}
               />
             );
           })}

@@ -10,15 +10,19 @@ export function postBlog(blog) {
   return http.post(apiEndpoint, {
     title: blog.title,
     body: blog.body,
-    authorId: blog.authorId,
+    author: blog.author,
   });
 }
 export function putBlog(id, blog) {
   return http.put(apiEndpoint + `/${id}`, {
     title: blog.title,
     body: blog.body,
-    authorName: blog.authorName,
-    authorId: blog.authorId,
+    author: blog.author,
+  });
+}
+export function likeBlog(blogId, authorId) {
+  return http.put(apiEndpoint + `/like/${blogId}`, {
+    authorId: authorId,
   });
 }
 export function getBlogById(id) {
